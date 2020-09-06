@@ -1,5 +1,5 @@
 import javafx.util.Pair;
-//Could fix by using one for loop by equalizing the elements in an array
+
 public class Narrator {
     int attitude = 0;
     String[] questions = {"what","who","when", "how","why", "does",
@@ -11,7 +11,7 @@ public class Narrator {
     String newLoc = "";
 
 
-    public Pair think(String s){
+    public Pair<String,Integer> think(String s){
         
         String[] words = s.split("\\W+");
         if(words.length > 1){

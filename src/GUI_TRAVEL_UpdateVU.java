@@ -74,7 +74,6 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         write.setOnKeyPressed(e -> {
             String in = write.getText();
             if (e.getCode() == KeyCode.UP) {
-                System.out.println(mainPane.getChildren().get(1));
                 if(mainPane.getChildren().get(1).getLayoutY()-mainPane.getChildren().get(5).getLayoutY()<60){
                 mainPane.getChildren().forEach(a -> {
                     if (a.getClass() == Text.class && a.getId() == null) {
@@ -171,8 +170,9 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                 if (introCount == 0) {
                     mainPane.getChildren().remove(0);
                     counter--;
-                    String introText = "Narrator: Hello, and welcome to the land of iphigenaia, this will be a ---------, \n"
-                            + "What is your name? (Please pick something wild)";
+                    String introText = "Narrator: Hello, and welcome to the land of iphigenaia. This will\n"
+                    + "hopefully be an amazing experience. What is your name? \n"
+                            + "(Please pick something wild)";
                     Text intro = new Text("");
                     typeWrite(introText, intro, 5, -740);
                     mainPane.getChildren().add(intro);
@@ -181,10 +181,9 @@ public class GUI_TRAVEL_UpdateVU extends Application {
 
                 } else if (introCount == 1) {
                     Text name = new Text("");
-                    typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 60);
+                    typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
 
                     mainChar = new Character(in, 10, 0, mainLocation, 100);
-                    System.out.println(mainChar.getLocation());
                     playerName = mainChar.getName();
 
                     mainPane.getChildren().add(name);
@@ -194,7 +193,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     health = new Text(" Health: ");
                     health.setId("health");
                     health.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
-                    setLayout(health, 0, -110);
+                    setLayout(health, 0, -130);
                     mainPane.getChildren().add(health);
                     counter++;
 

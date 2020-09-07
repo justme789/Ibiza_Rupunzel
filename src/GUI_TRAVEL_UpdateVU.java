@@ -71,7 +71,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         press.setStyle("-fx-fill: white;" + "-fx-font-size: 40px;" + "-fx-font-family: Verdana;");
 
         mainPane.setPadding(new Insets(20, 20, 20, 20));
-        mainPane.setStyle("-fx-background-color: #2d2d2d;");
+        mainPane.setStyle("-fx-background-color: #3e3e3e;");
         mainPane.getStylesheets().add("idk.css");
 
         mainPane.setBottom(write);
@@ -328,6 +328,37 @@ public class GUI_TRAVEL_UpdateVU extends Application {
 
     public void fight(Character attacker, Character attackee) {
         if (turn == 0) {
+            BorderPane fightPane = new BorderPane();
+            fightPane.setStyle("-fx-background-color: #242424;");
+            Stage fightStage = new Stage();
+            Scene fightScene = new Scene(fightPane, 400, 300);
+            Text mouseArt = new Text("           .-.(c)\n"+
+                                     "  (___( )     , \" - .\n"+
+                                     "          `~  ~\"\"`");
+            mouseArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+            mouseArt.setLayoutX(10);
+            mouseArt.setLayoutY(125);
+            fightPane.getChildren().add(mouseArt);
+
+            fightPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                }
+            });
+            fightPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    fightStage.setX(event.getScreenX() - xOffset);
+                    fightStage.setY(event.getScreenY() - yOffset);
+                }
+            });
+            fightStage.initStyle(StageStyle.UNDECORATED);
+            fightStage.setScene(fightScene);
+            fightStage.show();
+
+
             double mainAtk = attacker.attack();
             Text mainAttack = new Text("");
             attackee.damageTaken((int) mainAtk);
@@ -372,7 +403,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     public void paragraphBreaker(String s){
         int lines = (int)((s.length()/45)+0.5);
         ArrayList<String> sentences = new ArrayList<>();
-        
+
         
     }
 

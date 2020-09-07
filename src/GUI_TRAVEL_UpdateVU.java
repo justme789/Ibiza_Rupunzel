@@ -5,16 +5,19 @@ import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.animation.Animation.Status;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 //combine fight with travel?
@@ -30,6 +33,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     int travelCount = 0;
     boolean traveling = false;
     boolean gotName = true;
+    double xOffset = 0;
+    double yOffset = 0;
 
     String playerName = "Player";
     Character mainChar;
@@ -57,10 +62,10 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     public void start(Stage primaryStage) {
         mainLocation.canGo(newLoc);
         mainLocation.getEuclidDistance(newLoc);
-        mainScene = new Scene(mainPane, 750, 900);
+        mainScene = new Scene(mainPane, 600, 900);
 
         Text press = new Text("PRESS ENTER TO START");
-        press.setLayoutX(120);
+        press.setLayoutX(50);
         press.setLayoutY(400);
         mainPane.getChildren().add(press);
         press.setStyle("-fx-fill: white;" + "-fx-font-size: 40px;" + "-fx-font-family: Verdana;");
@@ -174,8 +179,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                 if (introCount == 0 && gotName) {
                     mainPane.getChildren().remove(0);
                     counter--;
-                    String introText = "Narrator: Hello, and welcome to the land of iphigenaia. This will\n"
-                            + "hopefully be an amazing experience. What is your name? \n"
+                    String introText = "Narrator: Hello, and welcome to the land of iphigenaia.\nThis will "
+                            + "hopefully be an amazing experience.\nWhat is your name? "
                             + "(Please pick something wild)";
                     Text intro = new Text("");
                     typeWrite(introText, intro, 5, -740);
@@ -224,9 +229,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     }
                 }else if (introCount == 2) {
                     Text explain = new Text("");
-                    String explainString = "Narrator: You might have realized that a health bar and money\nlabel "
-                            + "have appeared. They will help  you keep track of your health and \nmoney "
-                            + "before you start your adventure lets simulate a battle";
+                    String explainString = "Narrator: You might have realized that you can now \nsee your health and money."
+                            +"You can lose health during \nbattle. Let me show you.";
                     typeWrite(explainString, explain, 0, 0);
                     explain.setLayoutX(mainPane.getChildren().get(counter - 4).getLayoutX());
                     explain.setLayoutY(mainPane.getChildren().get(counter - 4).getLayoutY() + 40);
@@ -248,7 +252,21 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                 }
             }
         });
-
+        mainPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        mainPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                primaryStage.setX(event.getScreenX() - xOffset);
+                primaryStage.setY(event.getScreenY() - yOffset);
+            }
+        });
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
@@ -348,6 +366,14 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             return true;
         }
         return false;
+    }
+
+    //some line divider thingy
+    public void paragraphBreaker(String s){
+        int lines = (int)((s.length()/45)+0.5);
+        ArrayList<String> sentences = new ArrayList<>();
+        
+        
     }
 
     public static void main(String[] args) {

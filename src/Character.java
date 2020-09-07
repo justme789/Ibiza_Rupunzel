@@ -4,22 +4,25 @@ public class Character {
     int health , maxHealth;
     boolean enemy;
     Location mainCharLoc;
+    String design;
 
     public Character(){}
 
-    public Character(String name, int strength, int money, Location l, int health){
+    public Character(String name, int strength, int money, Location l, int health, String design){
         this.name = name;
         this.strength = strength;
         this.money = money;
         maxHealth = health;
         this.health = health;
         mainCharLoc = l;
+        this.design = design;
     }
-    public Character(String name, int strength, int health){
+    public Character(String name, int strength, int health, String design){
         this.name = name;
         this.strength = strength;
         maxHealth = health;
         this.health = health;
+        this.design = design;
     }
     
     public int getMoney(){
@@ -39,6 +42,11 @@ public class Character {
     public int attack(){
         return (int)(Math.random() *strength);
     }
+
+    public String getDesign(){
+        return design;
+    }
+    
     public void damageTaken(int damage){
         health = health - damage;
     }

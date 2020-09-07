@@ -46,10 +46,34 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     Animation animation;
     Scene mainScene;
 
-    Character mouse = new Character("Mouse", 5, 20);
-    Character wolf = new Character("Wolf", 10, 40);
-    Character bigHonkers = new Character("Big Honkers", 25, 100);
-    Character ent = new Character("Ent", 20, 3);
+    Character mouse = new Character("Mouse", 5, 20,
+                                     "           .-.(c)\n"+
+                                     "   (__( )     , \" - .\n"+
+                                     "          `~  ~\"\"`");
+    Character wolf = new Character("Wolf", 10, 40,"             /\n"+
+    "      ,~~   /\n"+
+    "  _  <=)  _/_\n"+
+    " /I\\.=\"==.{>\n"+
+    " \\I/-\\T/-'\n"+
+    "     /_\\\n"+
+    "    // \\\\_\n"+
+    "   _I    /\n");
+    Character bigHonkers = new Character("Big Honkers", 25, 100,"             /\n"+
+    "      ,~~   /\n"+
+    "  _  <=)  _/_\n"+
+    " /I\\.=\"==.{>\n"+
+    " \\I/-\\T/-'\n"+
+    "     /_\\\n"+
+    "    // \\\\_\n"+
+    "   _I    /\n");
+    Character ent = new Character("Ent", 20, 3, "             /\n"+
+    "      ,~~   /\n"+
+    "  _  <=)  _/_\n"+
+    " /I\\.=\"==.{>\n"+
+    " \\I/-\\T/-'\n"+
+    "     /_\\\n"+
+    "    // \\\\_\n"+
+    "   _I    /\n");
     Character enemy;
 
     ArrayList<Character> characters = new ArrayList<>(Arrays.asList(mouse, wolf, bigHonkers));
@@ -197,7 +221,15 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                         Text name = new Text("");
                     typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
 
-                    mainChar = new Character(in, 10, 0, mainLocation, 100);
+                    mainChar = new Character(in, 10, 0, mainLocation, 100, 
+                    "                   /\n"+
+                    "         ,~~   /\n"+
+                    "  _  <=)   _/_\n"+
+                    " /I\\.=\"==.{>\n"+
+                    " \\I/-\\T/-'\n"+
+                    "      /_\\\n"+
+                    "     // \\\\_\n"+
+                    "   _I    /\n");
                     playerName = mainChar.getName();
 
                     mainPane.getChildren().add(name);
@@ -332,13 +364,18 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             fightPane.setStyle("-fx-background-color: #242424;");
             Stage fightStage = new Stage();
             Scene fightScene = new Scene(fightPane, 400, 300);
-            Text mouseArt = new Text("           .-.(c)\n"+
-                                     "  (___( )     , \" - .\n"+
-                                     "          `~  ~\"\"`");
+            Text mouseArt = new Text(attackee.getDesign());
             mouseArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
             mouseArt.setLayoutX(10);
-            mouseArt.setLayoutY(125);
+            mouseArt.setLayoutY(155);
             fightPane.getChildren().add(mouseArt);
+
+            Text mainArt = new Text(attacker.getDesign());
+            mainArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+            mainArt.setLayoutX(230);
+            mainArt.setLayoutY(60);
+            fightPane.getChildren().add(mainArt);
+
 
             fightPane.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override

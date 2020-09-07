@@ -29,6 +29,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     int vsCount = 0;
     int travelCount = 0;
     boolean traveling = false;
+    boolean gotName = true;
 
     String playerName = "Player";
     Character mainChar;
@@ -74,35 +75,37 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         write.setOnKeyPressed(e -> {
             String in = write.getText();
             if (e.getCode() == KeyCode.UP) {
-                if(mainPane.getChildren().get(1).getLayoutY()-mainPane.getChildren().get(5).getLayoutY()<60){
-                mainPane.getChildren().forEach(a -> {
-                    if (a.getClass() == Text.class && a.getId() == null) {
-                        a.setLayoutY(a.getLayoutY() + 85);
-                        check();
-                    }
-                });
-            }
+                if (mainPane.getChildren().get(1).getLayoutY() - mainPane.getChildren().get(5).getLayoutY() < 60) {
+                    mainPane.getChildren().forEach(a -> {
+                        if (a.getClass() == Text.class && a.getId() == null) {
+                            a.setLayoutY(a.getLayoutY() + 85);
+                            check();
+                        }
+                    });
+                }
 
             } else if (safety > 0 && animation.getStatus() == Status.RUNNING) {
                 animation.jumpTo(animation.getTotalDuration());
 
             } else if (e.getCode() == KeyCode.DOWN) {
-                if(mainPane.getChildren().get(counter-1).getLayoutY()-mainPane.getChildren().get(5).getLayoutY()>300){
-                mainPane.getChildren().forEach(a -> {
-                    if (a.getClass() == Text.class && a.getId() == null) {
-                        a.setLayoutY(a.getLayoutY() - 85);
-                        check();
-                    }
-                });
-            }
+                if (mainPane.getChildren().get(counter - 1).getLayoutY()
+                        - mainPane.getChildren().get(5).getLayoutY() > 300) {
+                    mainPane.getChildren().forEach(a -> {
+                        if (a.getClass() == Text.class && a.getId() == null) {
+                            a.setLayoutY(a.getLayoutY() - 85);
+                            check();
+                        }
+                    });
+                }
 
             } else if (e.getCode() == KeyCode.ENTER && introCount >= 4) {
                 if (mainPane.getChildren().get(counter - 1).getLayoutY() > 700) {
                     down();
                 }
-                if (((int) narrate.think(in).getValue() == 2 && mainChar.getLocation().getDistance(narrate.getNewLoc()) > 0) || traveling) {
+                if (((int) narrate.think(in).getValue() == 2
+                        && mainChar.getLocation().getDistance(narrate.getNewLoc()) > 0) || traveling) {
                     if (travelCount == 0) {
-                        //not universal
+                        // not universal
                         nextLoc = newLoc;
                         write.clear();
                         Text travel = new Text("");
@@ -130,8 +133,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                         }
                     } else {
                         Text travelDist = new Text("");
-                        typeWrite("Narrator: You have " +  mainChar.getLocation().getDistance(nextLoc) + " steps left.", travelDist,
-                                0, 40);
+                        typeWrite("Narrator: You have " + mainChar.getLocation().getDistance(nextLoc) + " steps left.",
+                                travelDist, 0, 40);
                         mainPane.getChildren().add(travelDist);
                         counter++;
                         mainChar.getLocation().reducDistance(1);
@@ -140,8 +143,9 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                             mainChar.setLocation(nextLoc);
                             Text arrived = new Text("");
                             typeWrite("You have arrived at " + nextLoc.getName(), arrived, 0, 40);
-                        counter++;
-                        mainPane.getChildren().add(arrived);                        }
+                            counter++;
+                            mainPane.getChildren().add(arrived);
+                        }
                     }
 
                 } else {
@@ -167,20 +171,25 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                 }
 
             } else if (introCount < 4 && e.getCode() == KeyCode.ENTER) {
-                if (introCount == 0) {
+                if (introCount == 0 && gotName) {
                     mainPane.getChildren().remove(0);
                     counter--;
                     String introText = "Narrator: Hello, and welcome to the land of iphigenaia. This will\n"
-                    + "hopefully be an amazing experience. What is your name? \n"
+                            + "hopefully be an amazing experience. What is your name? \n"
                             + "(Please pick something wild)";
                     Text intro = new Text("");
                     typeWrite(introText, intro, 5, -740);
                     mainPane.getChildren().add(intro);
                     counter++;
-                    introCount++;
-
-                } else if (introCount == 1) {
-                    Text name = new Text("");
+                    gotName = true;
+                    if(in.length() == 0){
+                        gotName = false;
+                    }
+                    else{introCount++;}
+                }else if(introCount == 0 && !gotName){
+                    if(in.length()> 0){
+                        introCount++;
+                        Text name = new Text("");
                     typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
 
                     mainChar = new Character(in, 10, 0, mainLocation, 100);
@@ -212,10 +221,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     mainPane.getChildren().add(money);
                     counter++;
                     introCount++;
-
-                }
-
-                else if (introCount == 2) {
+                    }
+                }else if (introCount == 2) {
                     Text explain = new Text("");
                     String explainString = "Narrator: You might have realized that a health bar and money\nlabel "
                             + "have appeared. They will help  you keep track of your health and \nmoney "

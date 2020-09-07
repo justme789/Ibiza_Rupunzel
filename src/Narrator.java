@@ -14,32 +14,33 @@ public class Narrator {
     public Pair<String,Integer> think(String s){
         
         String[] words = s.split("\\W+");
-        if(words.length > 1){
+        System.out.println(words[0]);
+        if(words.length >= 1){
         for(int i = 0; i < questions.length; i++){
-            if(words[0].equals(questions[i])){ 
-                return new Pair<>("How am i supposed to know", 0);
+            if(words[0].toLowerCase().equals(questions[i].toLowerCase())){ 
+                return new Pair<>("How am i supposed to know?", 0);
             }
         }
         for(int i = 0; i<greetings.length; i++){
-            if(words.length>1 &&((words[0].concat(words[1])).equals(greetings[i]))){
+            if(words.length>1 &&((words[0].toLowerCase().concat(words[1])).equals(greetings[i].toLowerCase()))){
                 return new Pair<>("Do you really expect me to answer?", 0);
             }
-            else if(words[0].equals(greetings[i])){
-                return new Pair<>("Leave me alone", 0);
+            else if(words[0].toLowerCase().equals(greetings[i].toLowerCase())){
+                return new Pair<>("Leave me alone.", 0);
             }
         }
         for(int i = 0; i < attack.length; i++){
-            if(words[0].equals(attack[i])){
-                return new Pair<>("damage done",0);
+            if(words[0].toLowerCase().equals(attack[i].toLowerCase())){
+                return new Pair<>("damage done!",0);
             }
         }
         for(int i = 0; i < movement.length; i++){
-            if(words[0].equals(movement[i])){
+            if(words[0].toLowerCase().equals(movement[i].toLowerCase())){
                 return new Pair<>("Okay ",1);
             }
         }
         for(int i = 0; i < travel.length; i++){
-            if(words[0].equals(travel[i])){
+            if(words[0].toLowerCase().equals(travel[i].toLowerCase())&& words.length > 1){
                 newLoc = words[2];
                 return new Pair<>("You are going to go to "+words[2],2);
             }

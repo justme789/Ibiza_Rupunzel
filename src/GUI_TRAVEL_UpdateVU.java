@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -391,9 +392,25 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     fightStage.setY(event.getScreenY() - yOffset);
                 }
             });
+            Button fightButton = new Button("ATTACK!");
+            fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
+            fightButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    fightButton.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: black; -fx-background-radius: 15;");
+                } else {
+                    fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");                }
+            });
+
+            fightPane.setBottom(fightButton);
+            fightButton.setTranslateX(150);
+            fightButton.setTranslateY(-20);
             fightStage.initStyle(StageStyle.UNDECORATED);
             fightStage.setScene(fightScene);
             fightStage.show();
+
+            fightButton.setOnMouseClicked(e->{
+                
+            });
 
 
             double mainAtk = attacker.attack();

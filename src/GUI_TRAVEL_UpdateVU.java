@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.Transition;
+import javafx.animation.TranslateTransition;
 import javafx.animation.Animation.Status;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -48,33 +50,14 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     Scene mainScene;
 
     Character mouse = new Character("Mouse", 5, 20,
-                                     "           .-.(c)\n"+
-                                     "   (__( )     , \" - .\n"+
-                                     "          `~  ~\"\"`");
-    Character wolf = new Character("Wolf", 10, 40,"             /\n"+
-    "      ,~~   /\n"+
-    "  _  <=)  _/_\n"+
-    " /I\\.=\"==.{>\n"+
-    " \\I/-\\T/-'\n"+
-    "     /_\\\n"+
-    "    // \\\\_\n"+
-    "   _I    /\n");
-    Character bigHonkers = new Character("Big Honkers", 25, 100,"             /\n"+
-    "      ,~~   /\n"+
-    "  _  <=)  _/_\n"+
-    " /I\\.=\"==.{>\n"+
-    " \\I/-\\T/-'\n"+
-    "     /_\\\n"+
-    "    // \\\\_\n"+
-    "   _I    /\n");
-    Character ent = new Character("Ent", 20, 3, "             /\n"+
-    "      ,~~   /\n"+
-    "  _  <=)  _/_\n"+
-    " /I\\.=\"==.{>\n"+
-    " \\I/-\\T/-'\n"+
-    "     /_\\\n"+
-    "    // \\\\_\n"+
-    "   _I    /\n");
+            "           .-.(c)\n" + "   (__( )     , \" - .\n" + "          `~  ~\"\"`");
+    Character wolf = new Character("Wolf", 10, 40, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
+            + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
+    Character bigHonkers = new Character("Big Honkers", 25, 100,
+            "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n" + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n"
+                    + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
+    Character ent = new Character("Ent", 20, 3, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
+            + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
     Character enemy;
 
     ArrayList<Character> characters = new ArrayList<>(Arrays.asList(mouse, wolf, bigHonkers));
@@ -212,58 +195,54 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     mainPane.getChildren().add(intro);
                     counter++;
                     gotName = true;
-                    if(in.length() == 0){
+                    if (in.length() == 0) {
                         gotName = false;
+                    } else {
+                        introCount++;
                     }
-                    else{introCount++;}
-                }else if(introCount == 0 && !gotName){
-                    if(in.length()> 0){
+                } else if (introCount == 0 && !gotName) {
+                    if (in.length() > 0) {
                         introCount++;
                         Text name = new Text("");
-                    typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
+                        typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
 
-                    mainChar = new Character(in, 10, 0, mainLocation, 100, 
-                    "                   /\n"+
-                    "         ,~~   /\n"+
-                    "  _  <=)   _/_\n"+
-                    " /I\\.=\"==.{>\n"+
-                    " \\I/-\\T/-'\n"+
-                    "      /_\\\n"+
-                    "     // \\\\_\n"+
-                    "   _I    /\n");
-                    playerName = mainChar.getName();
+                        mainChar = new Character(in, 10, 0, mainLocation, 100,
+                                "                   /\n" + "         ,~~   /\n" + "  _  <=)   _/_\n"
+                                        + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "      /_\\\n" + "     // \\\\_\n"
+                                        + "   _I    /\n");
+                        playerName = mainChar.getName();
 
-                    mainPane.getChildren().add(name);
-                    write.clear();
-                    counter++;
+                        mainPane.getChildren().add(name);
+                        write.clear();
+                        counter++;
 
-                    health = new Text(" Health: ");
-                    health.setId("health");
-                    health.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
-                    setLayout(health, 0, -130);
-                    mainPane.getChildren().add(health);
-                    counter++;
+                        health = new Text(" Health: ");
+                        health.setId("health");
+                        health.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
+                        setLayout(health, 0, -130);
+                        mainPane.getChildren().add(health);
+                        counter++;
 
-                    progressBar = new ProgressBar(1);
-                    progressBar.setPrefWidth(200);
-                    mainPane.setLeft(progressBar);
-                    progressBar.setTranslateX(64);
-                    progressBar.setTranslateY(-2);
-                    counter++;
+                        progressBar = new ProgressBar(1);
+                        progressBar.setPrefWidth(200);
+                        mainPane.setLeft(progressBar);
+                        progressBar.setTranslateX(64);
+                        progressBar.setTranslateY(-2);
+                        counter++;
 
-                    Text money = new Text("Money: " + mainChar.getMoney());
-                    money.setId("money");
-                    money.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
-                    money.setLayoutX(mainPane.getChildren().get(counter - 2).getLayoutX() + 370);
-                    money.setLayoutY(mainPane.getChildren().get(counter - 2).getLayoutY());
-                    mainPane.getChildren().add(money);
-                    counter++;
-                    introCount++;
+                        Text money = new Text("Money: " + mainChar.getMoney());
+                        money.setId("money");
+                        money.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
+                        money.setLayoutX(mainPane.getChildren().get(counter - 2).getLayoutX() + 370);
+                        money.setLayoutY(mainPane.getChildren().get(counter - 2).getLayoutY());
+                        mainPane.getChildren().add(money);
+                        counter++;
+                        introCount++;
                     }
-                }else if (introCount == 2) {
+                } else if (introCount == 2) {
                     Text explain = new Text("");
                     String explainString = "Narrator: You might have realized that you can now \nsee your health and money."
-                            +"You can lose health during \nbattle. Let me show you.";
+                            + "You can lose health during \nbattle. Let me show you.";
                     typeWrite(explainString, explain, 0, 0);
                     explain.setLayoutX(mainPane.getChildren().get(counter - 4).getLayoutX());
                     explain.setLayoutY(mainPane.getChildren().get(counter - 4).getLayoutY() + 40);
@@ -377,7 +356,6 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             mainArt.setLayoutY(60);
             fightPane.getChildren().add(mainArt);
 
-
             fightPane.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -396,9 +374,12 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
             fightButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    fightButton.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: black; -fx-background-radius: 15;");
+                    fightButton.setStyle(
+                            "-fx-background-color: #FFFFFF; -fx-text-fill: black; -fx-background-radius: 15;");
                 } else {
-                    fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");                }
+                    fightButton.setStyle(
+                            "-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
+                }
             });
 
             fightPane.setBottom(fightButton);
@@ -408,40 +389,55 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             fightStage.setScene(fightScene);
             fightStage.show();
 
-            fightButton.setOnMouseClicked(e->{
-                
+            fightButton.setOnMouseClicked(e -> {
+                if (attackee.getHealth() < 1) {
+                    fightStage.close();
+                    introCount++;
+                    fightCount = 0;
+                    turn = 0;
+                    vsCount = 0;
+                    attackee.reset();
+                } else if (turn == 0) {
+                    double mainAtk = attacker.attack();
+                    attackee.damageTaken((int) mainAtk);
+                    turn++;
+                    Text text = new Text(mainAtk + "");
+                    text.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+                    text.setLayoutX(230);
+                    text.setLayoutY(70);
+                    fightPane.getChildren().add(text);
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(3000), text);
+                    tt.setByY(-100);
+                    tt.setCycleCount(1);
+                    tt.play();
+                    FadeTransition ft = new FadeTransition(Duration.millis(1000), text);
+                    ft.setFromValue(1.0);
+                    ft.setToValue(0);
+                    ft.setCycleCount(1);
+                    ft.play();
+                } else if (turn == 1) {
+                    double enemAtk = attackee.attack();
+
+                    attacker.damageTaken((int) enemAtk);
+                    progressBar.setProgress((mainChar.getHealth() - enemAtk) / mainChar.getMaxHealth());
+                    Text text = new Text((int) enemAtk + "");
+                    text.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+                    text.setLayoutX(170);
+                    text.setLayoutY(70);
+                    fightPane.getChildren().add(text);
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(3000), text);
+                    tt.setByY(-100);
+                    tt.setCycleCount(1);
+                    tt.play();
+                    FadeTransition ft = new FadeTransition(Duration.millis(1000), text);
+                    ft.setFromValue(1.0);
+                    ft.setToValue(0);
+                    ft.setCycleCount(1);
+                    ft.play();
+                    turn = 0;
+                }
             });
 
-
-            double mainAtk = attacker.attack();
-            Text mainAttack = new Text("");
-            attackee.damageTaken((int) mainAtk);
-            String mainAtkString = "Narrator: You've done " + (int) (mainAtk) + " damage";
-            typeWrite(mainAtkString, mainAttack, 0, 40);
-            mainPane.getChildren().add(mainAttack);
-            counter++;
-            turn++;
-            if (attackee.getHealth() < 1) {
-                introCount++;
-                fightCount = 0;
-                turn = 0;
-                vsCount = 0;
-                attackee.reset();
-            }
-        } else if (turn == 1) {
-            double enemAtk = attackee.attack();
-            Text enemAttack = new Text("");
-            attacker.damageTaken((int) enemAtk);
-            String enemString = "Narrator: " + attackee.getName() + "(" + (int) attackee.getHealth() + ")"
-                    + " has done " + (int) enemAtk + " damage";
-            typeWrite(enemString, enemAttack, 0, 40);
-            mainPane.getChildren().add(enemAttack);
-            progressBar.setProgress((mainChar.getHealth() - enemAtk) / mainChar.getMaxHealth());
-            counter++;
-            turn = 0;
-            if (mainPane.getChildren().get(counter - 1).getLayoutY() > 700) {
-                down();
-            }
         }
     }
 
@@ -453,12 +449,11 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         return false;
     }
 
-    //some line divider thingy
-    public void paragraphBreaker(String s){
-        int lines = (int)((s.length()/45)+0.5);
+    // some line divider thingy
+    public void paragraphBreaker(String s) {
+        int lines = (int) ((s.length() / 45) + 0.5);
         ArrayList<String> sentences = new ArrayList<>();
 
-        
     }
 
     public static void main(String[] args) {

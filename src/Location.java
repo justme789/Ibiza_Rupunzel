@@ -58,7 +58,7 @@ public class Location {
 
     public int getDistance(String s){
         for(int i = 0; i<locations.size(); i++){
-            if(locations.get(i).getName().equals(s)){
+            if(locations.get(i).getName().toLowerCase().equals(s.toLowerCase())){
                 return this.getEuclidDistance(s);                
             }
         }

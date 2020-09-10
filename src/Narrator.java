@@ -41,8 +41,8 @@ public class Narrator {
         }
         for(int i = 0; i < travel.length; i++){
             if(words[0].toLowerCase().equals(travel[i].toLowerCase())&& words.length > 1){
-                newLoc = words[2];
-                return new Pair<>("You are going to go to "+words[2],2);
+                newLoc = words[1];
+                return new Pair<>("You are going to go to "+words[1],2);
             }
         }
          return new Pair<>("Idk what you want like stop being annoying", 0);

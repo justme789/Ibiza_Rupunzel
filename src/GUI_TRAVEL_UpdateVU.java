@@ -35,6 +35,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     int turn = 0;
     int vsCount = 0;
     int travelCount = 0;
+    int distance = 0;
     boolean traveling = false;
     boolean gotName = true;
     double xOffset = 0;
@@ -50,8 +51,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     Animation animation;
     Scene mainScene;
 
-    Character mouse = new Character("Mouse", 5, 20,
-            "\n"+"           .-.(c)\n" + "   (__( )     , \" - .\n" + "          `~  ~\"\"`");
+    Character mouse = new Character("Mouse", 5, 1,
+            "\n" + "           .-.(c)\n" + "   (__( )     , \" - .\n" + "          `~  ~\"\"`");
     Character wolf = new Character("Wolf", 10, 40, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
             + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
     Character bigHonkers = new Character("Big Honkers", 25, 100,
@@ -70,7 +71,6 @@ public class GUI_TRAVEL_UpdateVU extends Application {
 
     public void start(Stage primaryStage) {
         mainLocation.canGo(newLoc);
-        mainLocation.getEuclidDistance(newLoc);
         mainScene = new Scene(mainPane, 600, 900);
 
         Text press = new Text("PRESS ENTER TO START");
@@ -115,60 +115,33 @@ public class GUI_TRAVEL_UpdateVU extends Application {
             } else if (e.getCode() == KeyCode.ENTER && introCount >= 4) {
                 if (mainPane.getChildren().get(counter - 1).getLayoutY() > 700) {
                     down();
-                }
-                if (((int) narrate.think(in).getValue() == 2
-                        && mainChar.getLocation().getDistance(narrate.getNewLoc()) > 0) || traveling) {
-                    if (travelCount == 0) {
-                        // not universal
-                        nextLoc = newLoc;
-                        write.clear();
+                } else if ((int) narrate.think(in).getValue() == 2 && !traveling) {
+                    if (narrate.getNewLoc().toLowerCase().equals(mainChar.getLocation().getName().toLowerCase())) {
+                        Text travel = new Text("");
+                        typeWrite("Narrator: You're already here simp :/", travel, 0, 40);
+                        mainPane.getChildren().add(travel);
+                        counter++;
+                    } else {
+                        for(Location a: places){
+                            if(a.getName().toLowerCase().equals(narrate.getNewLoc().toLowerCase())){
+                                nextLoc = a;
+                            }
+                        }
                         Text travel = new Text("");
                         typeWrite("Narrator: " + narrate.think(in).getKey(), travel, 0, 40);
                         mainPane.getChildren().add(travel);
                         counter++;
-                        travelCount++;
                         traveling = true;
-                    } else if (isFight() || fightCount == 1) {
-                        if (vsCount == 0) {
-                            write.clear();
-                            for (int i = 0; i < places.size(); i++) {
-                                if (places.get(i).equals(mainChar.getLocation())) {
-                                    enemy = places.get(i).getLives()
-                                            .get((int) (Math.random() * places.get(i).getLives().size()));
-                                }
-                            }
-                            Text yvm = new Text("");
-                            typeWrite("Narrator: You vs " + enemy.getName(), yvm, 0, 40);
-                            mainPane.getChildren().add(yvm);
-                            counter++;
-                            vsCount++;
-                        } else {
-                            fight(mainChar, enemy);
-                        }
-                    } else {
-                        Text travelDist = new Text("");
-                        typeWrite("Narrator: You have " + mainChar.getLocation().getDistance(nextLoc) + " steps left.",
-                                travelDist, 0, 40);
-                        mainPane.getChildren().add(travelDist);
-                        counter++;
-                        mainChar.getLocation().reducDistance(1);
-                        if (mainChar.getLocation().getDistance(nextLoc) == 0) {
-                            traveling = false;
-                            mainChar.setLocation(nextLoc);
-                            Text arrived = new Text("");
-                            typeWrite("You have arrived at " + nextLoc.getName(), arrived, 0, 40);
-                            counter++;
-                            mainPane.getChildren().add(arrived);
-                        }
+                        distance = mainChar.getLocation().getDistance(narrate.getNewLoc());
                     }
-
+                } else if (traveling) {
+                    travel(distance);
                 } else {
                     mainPane.getChildren().add((new Text(playerName + ":  " + write.getText())));
                     setLayout(mainPane.getChildren().get(counter), 0, 40);
                     mainPane.getChildren().get(counter)
                             .setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
                     counter++;
-
                     Text text = new Text("");
                     String content = "Narrator: " + narrate.think(in).getKey();
                     typeWrite(content, text, 0, 0);
@@ -250,9 +223,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     mainPane.getChildren().add(explain);
                     counter++;
                     introCount++;
-                }
-
-                else if (introCount == 3) {
+                } else if (introCount == 3) {
                     if (mainCount == 0) {
                         Text yvm = new Text("");
                         typeWrite("Narrator: You vs Mouse", yvm, 0, 85);
@@ -339,62 +310,59 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         n.setLayoutY(mainPane.getChildren().get(counter - 1).getLayoutY() + y);
     }
 
-    public void fight(Character attacker, Character attackee){
-            BorderPane fightPane = new BorderPane();
-            fightPane.setStyle("-fx-background-color: #242424;");
-            Stage fightStage = new Stage();
-            Scene fightScene = new Scene(fightPane, 400, 300);
-            Text enemArt = new Text(attackee.getDesign());
-            enemArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
-            enemArt.setLayoutX(10);
-            enemArt.setLayoutY((fightScene.getHeight()-enemArt.getBoundsInLocal().getHeight())/2);
-            fightPane.getChildren().add(enemArt);
+    public void fight(Character attacker, Character attackee) {
+        BorderPane fightPane = new BorderPane();
+        fightPane.setStyle("-fx-background-color: #242424;");
+        Stage fightStage = new Stage();
+        Scene fightScene = new Scene(fightPane, 400, 300);
+        Text enemArt = new Text(attackee.getDesign());
+        enemArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+        enemArt.setLayoutX(10);
+        enemArt.setLayoutY((fightScene.getHeight() - enemArt.getBoundsInLocal().getHeight()) / 2);
+        fightPane.getChildren().add(enemArt);
 
-            Text mainArt = new Text(attacker.getDesign());
-            mainArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
-            mainArt.setLayoutX(230);
-            mainArt.setLayoutY(60);
-            fightPane.getChildren().add(mainArt);
+        Text mainArt = new Text(attacker.getDesign());
+        mainArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+        mainArt.setLayoutX(230);
+        mainArt.setLayoutY(60);
+        fightPane.getChildren().add(mainArt);
 
-            TranslateTransition tt = new TranslateTransition(Duration.millis(500), mainArt);
-            TranslateTransition enemtt = new TranslateTransition(Duration.millis(500), enemArt);
+        TranslateTransition tt = new TranslateTransition(Duration.millis(500), mainArt);
+        TranslateTransition enemtt = new TranslateTransition(Duration.millis(500), enemArt);
 
-            fightPane.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    xOffset = event.getSceneX();
-                    yOffset = event.getSceneY();
-                }
-            });
-            fightPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    fightStage.setX(event.getScreenX() - xOffset);
-                    fightStage.setY(event.getScreenY() - yOffset);
-                }
-            });
-            Button fightButton = new Button("ATTACK!");
-            fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
-            fightButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    fightButton.setStyle(
-                            "-fx-background-color: #FFFFFF; -fx-text-fill: black; -fx-background-radius: 15;");
-                } else {
-                    fightButton.setStyle(
-                            "-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
-                }
-            });
+        fightPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        fightPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                fightStage.setX(event.getScreenX() - xOffset);
+                fightStage.setY(event.getScreenY() - yOffset);
+            }
+        });
+        Button fightButton = new Button("ATTACK!");
+        fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
+        fightButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                fightButton.setStyle("-fx-background-color: #FFFFFF; -fx-text-fill: black; -fx-background-radius: 15;");
+            } else {
+                fightButton.setStyle("-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 15;");
+            }
+        });
 
-            fightPane.setBottom(fightButton);
-            fightButton.setTranslateX(150);
-            fightButton.setTranslateY(-20);
-            fightStage.initStyle(StageStyle.UNDECORATED);
-            fightStage.setScene(fightScene);
-            fightStage.show();
+        fightPane.setBottom(fightButton);
+        fightButton.setTranslateX(150);
+        fightButton.setTranslateY(-20);
+        fightStage.initStyle(StageStyle.UNDECORATED);
+        fightStage.setScene(fightScene);
+        fightStage.show();
 
-            fightButton.setOnMouseClicked(e -> {
-                System.out.println(enemArt.getBoundsInLocal().getHeight()+"       "+mainArt.getBoundsInLocal().getHeight());
-                if(tt.getStatus() == Status.STOPPED && enemtt.getStatus() == Status.STOPPED){
+        fightButton.setOnMouseClicked(e -> {
+            if (tt.getStatus() == Status.STOPPED && enemtt.getStatus() == Status.STOPPED) {
                 if (attackee.getHealth() < 1) {
                     fightStage.close();
                     introCount++;
@@ -402,7 +370,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     turn = 0;
                     vsCount = 0;
                     attackee.reset();
-                } else{
+                } else {
                     double mainAtk = attacker.attack();
                     attackee.damageTaken((int) mainAtk);
                     Text text = new Text((int) mainAtk + "");
@@ -426,7 +394,6 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     lock++;
                     tt.statusProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue == Status.STOPPED && lock == 1) {
-                            System.out.println("i go");
                             double enemAtk = attackee.attack();
                             attacker.damageTaken((int) enemAtk);
                             progressBar.setProgress((mainChar.getHealth() - enemAtk) / mainChar.getMaxHealth());
@@ -455,8 +422,35 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     });
                 }
             }
-            });
+        });
+    }
+
+    public void travel(int remainingDist) {
+        System.out.println(mainChar.getLocation().getName());
+        if(remainingDist == 0){
+            mainChar.setLocation(nextLoc);
+            Text travel = new Text("");
+            typeWrite("Narrator: You've reached your destination", travel, 0, 40);
+            mainPane.getChildren().add(travel);
+            counter++;
+            traveling = false;
+        }else{
+            Text travel = new Text("");
+            typeWrite("Narrator: "+ remainingDist+" left!", travel, 0, 40);
+            mainPane.getChildren().add(travel);
+            counter++;
+            if(isFight()){
+                for (Location a: places) {
+                    if (a.equals(mainChar.getLocation())) {
+                        enemy = a.getLives()
+                                .get((int) (Math.random() * a.getLives().size()));
+                    }
+                }
+                fight(mainChar, enemy);
+            }
+            distance--;            
         }
+    }
 
     public boolean isFight() {
         if (Math.random() > 0.75) {

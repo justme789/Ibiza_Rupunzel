@@ -43,9 +43,8 @@ public class Location {
         }
     }
     public int getEuclidDistance(String s){
-        
         for(int i = 0; i<locations.size(); i++){
-            if(locations.get(i).getName().equals(s) && locations.get(i).isConnected(this)){
+            if(locations.get(i).isConnected(this)){
                 distance = locations.get(i).coord.getEuclid(this.coord);
                 return locations.get(i).coord.getEuclid(this.coord);               
             }

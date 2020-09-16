@@ -5,7 +5,7 @@ public class Narrator {
     String[] questions = {"what","who","when", "how","why", "does",
      "has","can", "shall", "is", "which", "did", "where"};
     String[] movement = {"move", "walk"}; 
-    String[] travel = {"travel","go"};
+    String[] travel = {"travel","go", "head"};
     String[] greetings = {"hi","hello","morning","goodmorning", "sup","whatsup","what'sup", "hey","yo"};
     String[] attack = {"hit", "attack", "beat"};
     String newLoc = "";
@@ -41,8 +41,11 @@ public class Narrator {
         }
         for(int i = 0; i < travel.length; i++){
             if(words[0].toLowerCase().equals(travel[i].toLowerCase())&& words.length > 1){
-                newLoc = words[1];
-                return new Pair<>("You are going to go to "+words[1],2);
+                if(words.length > 2){
+                    newLoc = words[2];
+                return new Pair<>("You are going to go to "+words[2],2);
+                }
+                return new Pair<>("Can you use normal grammar for the love of god!" ,0);
             }
         }
          return new Pair<>("Idk what you want like stop being annoying", 0);

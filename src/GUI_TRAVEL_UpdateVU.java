@@ -144,7 +144,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     counter++;
                     Text text = new Text("");
                     String content = "Narrator: " + narrate.think(in).getKey();
-                    typeWrite(content, text, 0, 0);
+                    //typeWrite(content, text, 0, 0);
+                    paragraphBreaker(content);
                     text.setLayoutX(mainPane.getChildren().get(counter - 1).getLayoutX());
                     text.setLayoutY(mainPane.getChildren().get(counter - 1).getLayoutY() + 40);
                     write.clear();
@@ -426,7 +427,6 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     }
 
     public void travel(int remainingDist) {
-        System.out.println(mainChar.getLocation().getName());
         if(remainingDist == 0){
             mainChar.setLocation(nextLoc);
             Text travel = new Text("");
@@ -462,9 +462,23 @@ public class GUI_TRAVEL_UpdateVU extends Application {
 
     // some line divider thingy
     public void paragraphBreaker(String s) {
+        String temp = s;
+        Text narratorText = new Text("");
+        String newString = "";
         int lines = (int) ((s.length() / 45) + 0.5);
-        ArrayList<String> sentences = new ArrayList<>();
-
+        if(lines > 0){
+            for(int i = 1; i <= lines; i++){
+                newString = temp.substring((i-1)*52, 52*i)+"\n"+temp.substring(52*i, temp.length());
+                temp = newString; 
+            }
+            typeWrite(newString, narratorText, 0, 40);
+            mainPane.getChildren().add(narratorText);
+            counter++;
+        }else{
+            typeWrite(s, narratorText, 0, 40);
+            mainPane.getChildren().add(narratorText);
+            counter++;
+        }
     }
 
     public static void main(String[] args) {

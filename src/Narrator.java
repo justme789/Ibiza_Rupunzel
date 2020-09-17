@@ -8,16 +8,17 @@ public class Narrator {
     String[] travel = {"travel","go", "head"};
     String[] greetings = {"hi","hello","morning","goodmorning", "sup","whatsup","what'sup", "hey","yo"};
     String[] attack = {"hit", "attack", "beat"};
-    String newLoc = "";
+    String newLoc = "Main";
 
 
-    public Pair<String,Integer> think(String s){
-        
+    public Pair<String, Integer> think(String s) {
         String[] words = s.split("\\W+");
-        System.out.println(words[0]);
         if(words.length >= 1){
         for(int i = 0; i < questions.length; i++){
             if(words[0].toLowerCase().equals(questions[i].toLowerCase())){ 
+                if(questions[i].equals("where") && words[1].equals("am")){
+                    return new Pair<>("I mean how do you not know where you are? " + newLoc +", sir.", 0);
+                }
                 return new Pair<>("How am i supposed to know?", 0);
             }
         }
@@ -48,7 +49,7 @@ public class Narrator {
                 return new Pair<>("Can you use normal grammar for the love of god!" ,0);
             }
         }
-         return new Pair<>("Idk what you want like stop being annoying", 0);
+         return new Pair<>("What does this even mean", 0);
     }
     else return new Pair<>("Dont be silly",0);
 }

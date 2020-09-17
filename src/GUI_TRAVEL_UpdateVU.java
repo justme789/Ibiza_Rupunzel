@@ -28,7 +28,7 @@ import javafx.util.Duration;
 public class GUI_TRAVEL_UpdateVU extends Application {
     int lock = 0;
     int fightCount = 0;
-    int counter = 2;
+    int counter = 4;
     int introCount = 0;
     int safety = 0;
     int mainCount = 0;
@@ -40,6 +40,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     boolean gotName = true;
     double xOffset = 0;
     double yOffset = 0;
+    int push = 40;
 
     String playerName = "Player";
     Character mainChar;
@@ -53,9 +54,9 @@ public class GUI_TRAVEL_UpdateVU extends Application {
 
     Character mouse = new Character("Mouse", 5, 1,
             "\n" + "           .-.(c)\n" + "   (__( )     , \" - .\n" + "          `~  ~\"\"`");
-    Character wolf = new Character("Wolf", 10, 40, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
+    Character wolf = new Character("Wolf", 10, 4, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
             + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
-    Character bigHonkers = new Character("Big Honkers", 25, 100,
+    Character bigHonkers = new Character("Big Honkers", 25, 1,
             "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n" + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n"
                     + "     /_\\\n" + "    // \\\\_\n" + "   _I    /\n");
     Character ent = new Character("Ent", 20, 3, "             /\n" + "      ,~~   /\n" + "  _  <=)  _/_\n"
@@ -70,6 +71,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     ArrayList<Location> places = new ArrayList<>(Arrays.asList(mainLocation, newLoc));
 
     public void start(Stage primaryStage) {
+
         mainLocation.canGo(newLoc);
         mainScene = new Scene(mainPane, 600, 900);
 
@@ -79,6 +81,46 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         mainPane.getChildren().add(press);
         press.setStyle("-fx-fill: white;" + "-fx-font-size: 40px;" + "-fx-font-family: Verdana;");
 
+        Button closeButton = new Button("✕");
+        closeButton.setTranslateX(10);
+        closeButton.setTranslateY(-40);
+        closeButton.setStyle("-fx-background-color: #313131; -fx-text-fill: red; -fx-background-radius: 36em;"
+                + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 10px;");
+        closeButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                closeButton.setStyle("-fx-background-color: #c30808; -fx-text-fill: black; -fx-background-radius: 30em;"
+                        + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 10px;");
+            } else {
+                closeButton.setStyle("-fx-background-color: #313131; -fx-text-fill: red; -fx-background-radius: 30em;"
+                        + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 10px;");
+            }
+        });
+        closeButton.setOnMousePressed(e -> {
+            System.exit(0);
+        });
+        mainPane.setRight(closeButton);
+
+        Button minimizeButton = new Button("−");
+        minimizeButton.setTranslateX(500);
+        minimizeButton.setTranslateY(-10);
+        minimizeButton.setStyle("-fx-background-color: #313131; -fx-text-fill: yellow; -fx-background-radius: 36em;"
+                + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 14px;");
+        minimizeButton.hoverProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                minimizeButton
+                        .setStyle("-fx-background-color: #cacc00; -fx-text-fill: black; -fx-background-radius: 30em;"
+                                + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 10px;");
+            } else {
+                minimizeButton
+                        .setStyle("-fx-background-color: #313131; -fx-text-fill: yellow; -fx-background-radius: 30em;"
+                                + "-fx-min-width: 30px; -fx-min-height: 30px; -fx-max-width: 30px;-fx-max-height: 30px; -fx-font-size: 10px;");
+            }
+        });
+        minimizeButton.setOnMousePressed(e -> {
+            primaryStage.setIconified(true);
+        });
+        mainPane.setTop(minimizeButton);
+
         mainPane.setPadding(new Insets(20, 20, 20, 20));
         mainPane.setStyle("-fx-background-color: #3e3e3e;");
         mainPane.getStylesheets().add("idk.css");
@@ -86,6 +128,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         mainPane.setBottom(write);
         write.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 28));
         write.setStyle("-fx-background-color: #494949;" + "-fx-text-fill: white;");
+        write.requestFocus();
         write.setOnKeyPressed(e -> {
             String in = write.getText();
             if (e.getCode() == KeyCode.UP) {
@@ -122,8 +165,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                         mainPane.getChildren().add(travel);
                         counter++;
                     } else {
-                        for(Location a: places){
-                            if(a.getName().toLowerCase().equals(narrate.getNewLoc().toLowerCase())){
+                        for (Location a : places) {
+                            if (a.getName().toLowerCase().equals(narrate.getNewLoc().toLowerCase())) {
                                 nextLoc = a;
                             }
                         }
@@ -131,26 +174,22 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                         typeWrite("Narrator: " + narrate.think(in).getKey(), travel, 0, 40);
                         mainPane.getChildren().add(travel);
                         counter++;
+                        write.clear();
                         traveling = true;
                         distance = mainChar.getLocation().getDistance(narrate.getNewLoc());
                     }
                 } else if (traveling) {
+                    write.clear();
                     travel(distance);
                 } else {
                     mainPane.getChildren().add((new Text(playerName + ":  " + write.getText())));
-                    setLayout(mainPane.getChildren().get(counter), 0, 40);
+                    setLayout(mainPane.getChildren().get(counter), 0, push);
                     mainPane.getChildren().get(counter)
                             .setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
                     counter++;
-                    Text text = new Text("");
                     String content = "Narrator: " + narrate.think(in).getKey();
-                    //typeWrite(content, text, 0, 0);
+                    // typeWrite(content, text, 0, 0);
                     paragraphBreaker(content);
-                    text.setLayoutX(mainPane.getChildren().get(counter - 1).getLayoutX());
-                    text.setLayoutY(mainPane.getChildren().get(counter - 1).getLayoutY() + 40);
-                    write.clear();
-                    counter++;
-                    mainPane.getChildren().add(text);
                     check();
 
                     if (mainPane.getChildren().get(counter - 1).getLayoutY() > 700) {
@@ -169,51 +208,42 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     typeWrite(introText, intro, 5, -740);
                     mainPane.getChildren().add(intro);
                     counter++;
-                    gotName = true;
-                    if (in.length() == 0) {
-                        gotName = false;
-                    } else {
-                        introCount++;
-                    }
-                } else if (introCount == 0 && !gotName) {
-                    if (in.length() > 0) {
-                        introCount++;
-                        Text name = new Text("");
-                        typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
+                    gotName = false;
+                } else if (introCount == 1) {
+                    Text name = new Text("");
+                    typeWrite("Narrator: So your name is " + in + "? What a loser.", name, 0, 80);
 
-                        mainChar = new Character(in, 10, 0, mainLocation, 100,
-                                "                   /\n" + "         ,~~   /\n" + "  _  <=)   _/_\n"
-                                        + " /I\\.=\"==.{>\n" + " \\I/-\\T/-'\n" + "      /_\\\n" + "     // \\\\_\n"
-                                        + "   _I    /\n");
-                        playerName = mainChar.getName();
+                    mainChar = new Character(in, 10, 0, mainLocation, 100,
+                            "                   /\n" + "         ,~~   /\n" + "  _  <=)   _/_\n" + " /I\\.=\"==.{>\n"
+                                    + " \\I/-\\T/-'\n" + "      /_\\\n" + "     // \\\\_\n" + "   _I    /\n");
+                    playerName = mainChar.getName();
 
-                        mainPane.getChildren().add(name);
-                        write.clear();
-                        counter++;
+                    mainPane.getChildren().add(name);
+                    write.clear();
+                    counter++;
 
-                        health = new Text(" Health: ");
-                        health.setId("health");
-                        health.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
-                        setLayout(health, 0, -130);
-                        mainPane.getChildren().add(health);
-                        counter++;
+                    health = new Text(" Health: ");
+                    health.setId("health");
+                    health.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
+                    setLayout(health, 0, -130);
+                    mainPane.getChildren().add(health);
+                    counter++;
 
-                        progressBar = new ProgressBar(1);
-                        progressBar.setPrefWidth(200);
-                        mainPane.setLeft(progressBar);
-                        progressBar.setTranslateX(64);
-                        progressBar.setTranslateY(-2);
-                        counter++;
+                    progressBar = new ProgressBar(1);
+                    progressBar.setPrefWidth(200);
+                    mainPane.setLeft(progressBar);
+                    progressBar.setTranslateX(64);
+                    progressBar.setTranslateY(-30);
+                    counter++;
 
-                        Text money = new Text("Money: " + mainChar.getMoney());
-                        money.setId("money");
-                        money.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
-                        money.setLayoutX(mainPane.getChildren().get(counter - 2).getLayoutX() + 370);
-                        money.setLayoutY(mainPane.getChildren().get(counter - 2).getLayoutY());
-                        mainPane.getChildren().add(money);
-                        counter++;
-                        introCount++;
-                    }
+                    Text money = new Text("Money: " + mainChar.getMoney());
+                    money.setId("money");
+                    money.setStyle("-fx-fill: white;" + "-fx-font-size: 14px;" + "-fx-font-family: Verdana;");
+                    money.setLayoutX(mainPane.getChildren().get(counter - 2).getLayoutX() + 370);
+                    money.setLayoutY(mainPane.getChildren().get(counter - 2).getLayoutY());
+                    mainPane.getChildren().add(money);
+                    counter++;
+                    introCount++;
                 } else if (introCount == 2) {
                     Text explain = new Text("");
                     String explainString = "Narrator: You might have realized that you can now \nsee your health and money."
@@ -234,6 +264,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                     } else if (mainCount == 1) {
                         fight(mainChar, mouse);
                     }
+                } else if (in.length() > 0) {
+                    introCount++;
                 }
             }
         });
@@ -427,28 +459,27 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     }
 
     public void travel(int remainingDist) {
-        if(remainingDist == 0){
+        if (remainingDist == 0) {
             mainChar.setLocation(nextLoc);
             Text travel = new Text("");
             typeWrite("Narrator: You've reached your destination", travel, 0, 40);
             mainPane.getChildren().add(travel);
             counter++;
             traveling = false;
-        }else{
+        } else {
             Text travel = new Text("");
-            typeWrite("Narrator: "+ remainingDist+" left!", travel, 0, 40);
+            typeWrite("Narrator: " + remainingDist + " left!", travel, 0, 40);
             mainPane.getChildren().add(travel);
             counter++;
-            if(isFight()){
-                for (Location a: places) {
+            if (isFight()) {
+                for (Location a : places) {
                     if (a.equals(mainChar.getLocation())) {
-                        enemy = a.getLives()
-                                .get((int) (Math.random() * a.getLives().size()));
+                        enemy = a.getLives().get((int) (Math.random() * a.getLives().size()));
                     }
                 }
                 fight(mainChar, enemy);
             }
-            distance--;            
+            distance--;
         }
     }
 
@@ -466,17 +497,21 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         Text narratorText = new Text("");
         String newString = "";
         int lines = (int) ((s.length() / 45) + 0.5);
-        if(lines > 0){
-            for(int i = 1; i <= lines; i++){
-                newString = temp.substring((i-1)*52, 52*i)+"\n"+temp.substring(52*i, temp.length());
-                temp = newString; 
+        if (lines > 0) {
+            for (int i = 1; i <= lines; i++) {
+                newString = temp.substring((i - 1) * 52, 52 * i) + "\n" + temp.substring(52 * i, temp.length());
+                temp = newString;
             }
             typeWrite(newString, narratorText, 0, 40);
             mainPane.getChildren().add(narratorText);
+            write.clear();
+            push = 32 * (lines + 1);
             counter++;
-        }else{
+        } else {
             typeWrite(s, narratorText, 0, 40);
             mainPane.getChildren().add(narratorText);
+            write.clear();
+            push = 40;
             counter++;
         }
     }

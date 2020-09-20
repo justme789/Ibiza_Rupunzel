@@ -1,8 +1,12 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.Animation.Status;
@@ -16,6 +20,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -38,6 +45,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     int distance = 0;
     boolean traveling = false;
     boolean gotName = true;
+    boolean dead = false;
     double xOffset = 0;
     double yOffset = 0;
     int push = 40;
@@ -71,6 +79,10 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     ArrayList<Location> places = new ArrayList<>(Arrays.asList(mainLocation, newLoc));
 
     public void start(Stage primaryStage) {
+        String musicFile = "bard.mp3"; // For example
+
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
         mainLocation.canGo(newLoc);
         mainScene = new Scene(mainPane, 600, 900);
@@ -201,6 +213,7 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                 if (introCount == 0 && gotName) {
                     mainPane.getChildren().remove(0);
                     counter--;
+                    mediaPlayer.play();
                     String introText = "Narrator: Hello, and welcome to the land of iphigenaia.\nThis will "
                             + "hopefully be an amazing experience.\nWhat is your name? "
                             + "(Please pick something wild)";
@@ -344,10 +357,13 @@ public class GUI_TRAVEL_UpdateVU extends Application {
     }
 
     public void fight(Character attacker, Character attackee) {
+        dead = false;
+        write.setEditable(false);
         BorderPane fightPane = new BorderPane();
         fightPane.setStyle("-fx-background-color: #242424;");
         Stage fightStage = new Stage();
         Scene fightScene = new Scene(fightPane, 400, 300);
+        fightScene.setFill(Color.TRANSPARENT);
         Text enemArt = new Text(attackee.getDesign());
         enemArt.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
         enemArt.setLayoutX(10);
@@ -391,42 +407,56 @@ public class GUI_TRAVEL_UpdateVU extends Application {
         fightButton.setTranslateX(150);
         fightButton.setTranslateY(-20);
         fightStage.initStyle(StageStyle.UNDECORATED);
+        fightStage.initStyle(StageStyle.TRANSPARENT);
         fightStage.setScene(fightScene);
         fightStage.show();
 
         fightButton.setOnMouseClicked(e -> {
             if (tt.getStatus() == Status.STOPPED && enemtt.getStatus() == Status.STOPPED) {
-                if (attackee.getHealth() < 1) {
-                    fightStage.close();
-                    introCount++;
-                    fightCount = 0;
-                    turn = 0;
-                    vsCount = 0;
-                    attackee.reset();
-                } else {
-                    double mainAtk = attacker.attack();
-                    attackee.damageTaken((int) mainAtk);
-                    Text text = new Text((int) mainAtk + "");
-                    text.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
-                    text.setLayoutX(170);
-                    text.setLayoutY(70);
-                    fightPane.getChildren().add(text);
-                    tt.setByX(-100);
-                    tt.setCycleCount(2);
-                    tt.setAutoReverse(true);
-                    tt.play();
-                    TranslateTransition damgeAnim = new TranslateTransition(Duration.millis(3000), text);
-                    damgeAnim.setByY(-100);
-                    damgeAnim.setCycleCount(1);
-                    damgeAnim.play();
-                    FadeTransition ft = new FadeTransition(Duration.millis(1000), text);
-                    ft.setFromValue(1.0);
-                    ft.setToValue(0);
-                    ft.setCycleCount(1);
-                    ft.play();
-                    lock++;
-                    tt.statusProperty().addListener((observable, oldValue, newValue) -> {
-                        if (newValue == Status.STOPPED && lock == 1) {
+                double mainAtk = attacker.attack();
+                attackee.damageTaken((int) mainAtk);
+                Text text = new Text((int) mainAtk + "");
+                text.setStyle("-fx-fill: white;" + "-fx-font-size: 20px;" + "-fx-font-family: Verdana;");
+                text.setLayoutX(170);
+                text.setLayoutY(70);
+                fightPane.getChildren().add(text);
+                tt.setByX(-100);
+                tt.setCycleCount(2);
+                tt.setAutoReverse(true);
+                tt.play();
+                TranslateTransition damgeAnim = new TranslateTransition(Duration.millis(3000), text);
+                damgeAnim.setByY(-100);
+                damgeAnim.setCycleCount(1);
+                damgeAnim.play();
+                FadeTransition ft = new FadeTransition(Duration.millis(1000), text);
+                ft.setFromValue(1.0);
+                ft.setToValue(0);
+                ft.setCycleCount(1);
+                ft.play();
+                lock++;
+                tt.statusProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue == Status.STOPPED && lock == 1) {
+                        if (attackee.getHealth() < 1) {
+                            FadeTransition enemDead = new FadeTransition(Duration.millis(200), enemArt);
+                            enemDead.setFromValue(1.0);
+                            enemDead.setToValue(0);
+                            enemDead.setCycleCount(1);
+                            enemDead.play();
+                            Timeline timeline = new Timeline();
+                            KeyFrame key = new KeyFrame(Duration.millis(2000),
+                                    new KeyValue(fightStage.getScene().getRoot().opacityProperty(), 0));
+                            timeline.getKeyFrames().add(key);
+                            timeline.setOnFinished((ae) -> fightStage.close());
+                            timeline.play();
+                            introCount++;
+                            fightCount = 0;
+                            turn = 0;
+                            vsCount = 0;
+                            attackee.reset();
+                            write.setEditable(true);
+                            dead = true;
+                        }
+                        if (!dead) {
                             double enemAtk = attackee.attack();
                             attacker.damageTaken((int) enemAtk);
                             progressBar.setProgress((mainChar.getHealth() - enemAtk) / mainChar.getMaxHealth());
@@ -452,8 +482,8 @@ public class GUI_TRAVEL_UpdateVU extends Application {
                             enemFt.play();
                             lock--;
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }

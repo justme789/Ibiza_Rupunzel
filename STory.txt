@@ -1,0 +1,162 @@
+The Name?
+Saving Ibiza Rupunzel
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+The Story
+There is a narrator who walks you through your adventure after you wake up
+in an unknown shack in a forest where you are greeted by the "narrator".
+The Narrator tries to explain what happened but to no avail. You've lost your
+memory. The narrator will explain the controls and how everything works
+
+          -----------------------------------------------------
+          Vague:-
+          Something about a city where you can meet characters
+          and accept quests. Money will be a factor. Quests can
+          be story related and none story related. Each individual
+          path will have its own missions
+
+
+          The regaining memory one will require a sacrifice
+            You will have to lose someone you love
+
+          The Castle one will require incredible money
+            Make money from quests and selling items
+
+          The saving the princess will require incredible strength
+            Level up
+
+          The making friends of all species onewill require so much time
+            Meet and get to hang out with different species
+
+          -----------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+The Concept
+
+There will be multiple paths to success(too much?) where you can win by
+completing one path or multiple paths.
+
+breakdown and narrator fight should be in there
+
+Path 1: Castle.
+Path 2: Re-gain Memory
+Path 3: Make friends of all species(Species? Do you pick your own?)
+Path 4: Saving The Princess
+
+
+
+You introduce yourself by giving your name. You will have a set integer for
+health, and strength. You'll be able to level up which will increase all your
+previously mentioned stats.
+
+The narrator will have a "mood" based on how you talk to them. They can get
+really mean
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Cities, connections, and monster types?:-
+
+Volcano                                                                   Tower
+
+                            Forest
+
+                                  Cottage
+
+                                    MainCity
+
+                                    Castle
+
+        Beach                                   LesserCity
+
+Ocean                                                         GraveYard
+
+                                  River                                  Swamps
+
+Volcano to Tower                              Volcano:- magma golem, lava creature, angry burning ent
+Tower to Volcano                              Tower:- Dragon, mice
+Forest to Volcano                             Forest:- mice, ents, greenies
+Volcano to forest                             Main:- Mice, wolves
+Forest to cotteage                            cottage:-Thugs, Mice, Wolves, Big chicken
+Cottage to forest                             Castle:- Eagles, Armored Squirrels
+Cottage to Main                               Beach:- Crab, big Crab, Glass Man
+main to Cottage                               Ocean:- Kelp Man, Crazy hammerhead
+main to Castle                                Swamps:- One tooth beaver, Purple Platypus
+castle to Main                                GraveYard:- Zombies, Ghouls, Ghosts, skeletons
+main to Beach                                 LesserCity:- Stronger thugs?
+beach to main                                 River:- Salmon humanoid, water creature
+main to LesserCity
+LesserCity to Main
+beach to Ocean
+ocean to Beach
+lessercity to GraveYard
+graveyard to LesserCity
+GraveYard to Swamps
+swamos to graveyard
+swamps to River
+River to Ocean
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+To do:-
+Inventory
+Store
+Buying and selling
+weapons
+leveling up
+Party?
+Potions
+More attacking options
+stamina
+more commands
+the question commands should return some story related answer
+Explore command to list locations
+categorize items
+Store GUI
+likeness meter
+narrator attitude
+more responses
+randomize store items based on location
+stuffs in locations
+Other characters can speak too.
+Branching
+Quest
+charcaters link to quest keywords
+Optimization
+Races?
+GUI for characterswith
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+Story Detail:-
+
+Hey!
+Wake up!
+We need to leave this place. You cant stay here its not safe you need to go get
+armor and weapons. You need to go to the main city.
+--fight, enemy drops a potion and some ridiculous money for rusty sword--
+You need to keep going so you can use that money on a sword.
+You can type explore to see what exists in this location.
+Now you can type "go to" and the area you want to go to.
+Test it now with the store.
+--buy rusty sword, can buy other stuff but game will divert to path if little
+ statue is bought(1)--
+Clerk: I havent seen you before, are you new in town?
+--player gets to choose if yes continue if no branch to (2)--
+Clerk: where did you come from
+Do you know were you before you woke up in the cottage? I mean i just stumbled
+on you and Something about you intrigued me but idk where you came from.
+The Clerk is waiting for your answer.
+--if i dont know or the cottage keep going else branch to(3)--
+Clerk: Damn, well what is your name?
+Yeah what is your name?
+--Enter name--
+Clerk: Well *name*, sounds like you lost your memory you should go out and check
+if someone has info in the tavern. Maybe you can find yourself a room. Good Luck!
+You can use exit to leave a place and exit *place* if you're classy
+--wait for exit--
+You should go to the tavern like the Clerk said but no pressure
+--if tavern narrator++ else narrator-- just once--
+Explore also works for people, maybe you might have noticed that when you used
+it before.
+--wait for explore--
+You can talk to whoever you want
